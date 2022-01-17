@@ -1,4 +1,6 @@
 using AppointmentScheduler.Models;
+using AppointmentScheduler.Services.Implementations;
+using AppointmentScheduler.Services.Interfaces;
 
 using Microsoft.AspNetCore.Builder;
 using Microsoft.AspNetCore.Hosting;
@@ -30,6 +32,7 @@ namespace AppointmentScheduler
         {
             services.AddControllersWithViews();
             services.AddAuthentication().AddCookie();
+            services.AddScoped<IAppointmentService, AppointmentService>();
             services.AddDbContext<ApplicationDbContext>(options => options.UseSqlServer(
                     Configuration.GetConnectionString("DefaultConnection")
                 ));

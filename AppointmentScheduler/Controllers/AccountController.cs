@@ -42,8 +42,17 @@ namespace AppointmentScheduler.Controllers
             if (!signinResult.Succeeded)
             {
                 ModelState.AddModelError("", "Email or password is not correct");
+                return View(model);
             }
-            return View();
+            return RedirectToAction("Index", "Appointments");
+        }
+
+        [HttpPost]
+        [ValidateAntiForgeryToken]
+        public async Task<IActionResult> LogOff()
+        {
+            await _signInManager.SignOutAsync();
+            return RedirectToAction("Login", "Account");
         }
 
         public async Task<IActionResult> Register()
@@ -76,7 +85,11 @@ namespace AppointmentScheduler.Controllers
             var identityResult = await _userManager.CreateAsync(user, model.Password);
             if (!identityResult.Succeeded)
             {
-
+                foreach(var err in identityResult.Errors)
+                {
+                    ModelState.AddModelError("", err.Description);
+                    return View(model);
+                }
             }
 
             await _userManager.AddToRoleAsync(user, model.RoleName);
