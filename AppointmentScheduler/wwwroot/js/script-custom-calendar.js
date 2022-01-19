@@ -35,7 +35,7 @@ function InitializeCalendar() {
                         success: function (response) {
                             var events = [];
                             if (response.status === 1) {
-                                $.each(response.dataenum, function (i, data) {
+                                $.each(response.data, function (i, data) {
                                     events.push({
                                         title: data.title,
                                         description: data.description,
@@ -126,7 +126,7 @@ function onSubmitForm() {
         };
 
         $.ajax({
-            url: routeURL + '/api/Appointment/SaveCalendarData',
+            url: routeURL + '/api/Appointment',
             type: 'POST',
             data: JSON.stringify(requestData),
             contentType: 'application/json',
@@ -142,6 +142,7 @@ function onSubmitForm() {
             },
             error: function (xhr) {
                 $.notify("Error", "error");
+                console.log(requestData);
             }
         });
     }
